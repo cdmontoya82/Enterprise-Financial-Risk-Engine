@@ -1,23 +1,58 @@
-# Corporate Financial Risk Engine & Monte Carlo Simulator
+# Stochastic Logistics Forecasting: Pure Monte Carlo vs. Hybrid Prophet Pipeline
 
-This repository contains an end-to-end analytical data pipeline designed to model corporate financial uncertainty and estimate the **Value at Risk (VaR)** of operating cash flows using **Monte Carlo Simulations**. 
+An advanced data product designed to solve predictive risk management in freight logistics. This repository contains a comparative framework between a **Pure Stochastic Monte Carlo Simulation** and a **Hybrid Time-Series Model (Meta Prophet + Monte Carlo Residuals)** to simulate and quantify risk ceilings for monthly operations.
 
-## 📊 Business Problem
-Traditional financial projections rely on linear, static assumptions (e.g., assuming a fixed 5% annual growth). However, macroeconomic shifts, logistics anomalies, inflation, and volatile freight prices create high operational uncertainty. This engine substitutes static numbers with stochastic distributions, computing **10,000 parallel market scenarios** to safeguard corporate liquidity.
+## 📈 Business Problem
+In freight logistics, traditional "point forecasts" (averages) fail drastically because they ignore high-impact operational chaos: driver availability shortages, weather disruptions, route deviations, and unpredictable demand spikes. 
 
-## 🛠️ Architecture & Tech Stack
-- **Python Core:** Built without unnecessary heavy frameworks using standard computational libraries (`NumPy`, `Pandas`).
-- **Data Engineering (Storage Optimization):** The simulator outputs dense, multi-variable data rows. To demonstrate modern corporate governance and pipeline optimization, results are compressed and stored utilizing **Apache Parquet (`pyarrow`)**, ensuring lightweight storage and high-throughput reading.
-- **Quantitative Finance:** Implements Probability Distributions (Gaussian/Normal) to inject cost and revenue shocks, establishing risk boundaries using the 95th percentile threshold.
-
-## 📂 Project Structure
-- `financial_simulation.py`: The core pipeline execution script. Generates the stochastic matrix, executes the simulations, calculates the VaR metrics, and exports the optimized data lake file.
-- `monte_carlo_financial_results.parquet`: The high-performance snapshot of the simulation results.
-
-## 📈 Executive Risk Report
-When executed, the system evaluates the cumulative performance across all parallel universes, yielding critical KPIs for financial controllers:
-- **Expected Net Cash Flow:** The statistical mean of the company's financial generation.
-- **Value at Risk (VaR at 95% Confidence):** The ultimate risk-management baseline. It establishes the worst-case scenario with a 95% level of confidence, ensuring strategic alignment for dynamic pricing models.
+To hedge financial risk and secure fleet capacity, supply chain executives need to know **not just the average outcome, but the risk ceiling (95th percentile confidence)** to avoid capacity stockouts or budget overruns.
 
 ---
-*Developed as a showcase of Financial Analytics & Full-Stack Data Science integration.*
+
+## 🛠️ Framework Architecture
+
+This framework processes real-world delivery logs and runs two distinct paradigms:
+
+1. **Pure Monte Carlo Simulation (Bootstrapping):** Resamples raw historical daily mileage logs $10,000$ times to determine a distribution based strictly on historical variance.
+2. **Hybrid Pipeline (Prophet + MC Error Modelling):** * **Prophet** captures time-series patterns (weekly patterns, seasonal trends, and upcoming calendar structures).
+   * **Monte Carlo** targets the model's historical residuals ($\text{Actual} - \text{Predicted}$). By simulating the *unmodeled chaos* over the structural forecast, it provides a much tighter and highly realistic risk distribution.
+  
+   * ┌───────────────────┐      ┌────────────────────┐
+   │ Historical Data   │─────>│   Meta Prophet     │───> [Structural Trend]
+   └───────────────────┘      └────────────────────┘          │
+             │                           │                    │
+             ▼                           ▼                    ▼
+   ┌───────────────────┐      ┌────────────────────┐      ┌────────────────────┐
+   │  Pure Bootstrap   │      │ Compute Residuals  │      │ Combine & Simulate │
+   │ (Monte Carlo Only)│      │  (Chaos Extraction)│      │ (Hybrid Output)    │
+   └───────────────────┘      └────────────────────┘      └────────────────────┘
+---
+
+## 📊 Performance Comparison & Interpretations
+
+### Approach 1: Pure Monte Carlo Simulation
+Generates a wide probability distribution based strictly on historical data combinations. It serves as a great unconstrained historical risk model.
+
+* **Risk Ceiling (95th Percentile):** ~2.63M km. (Only a 5% chance operational demand will exceed this value).
+
+![Pure Monte Carlo](monte_carlo_pure.png)
+
+### Approach 2: Hybrid Prophet + Monte Carlo Model
+By isolating the structural calendar patterns first, this model narrows down the variance. The resulting probability bell curve is tighter, drastically reducing unnecessary "safety-cushion" spending.
+
+* **Risk Ceiling (95th Percentile):** ~2.38M km. 
+* **The Optimization:** The Hybrid model cuts out **~240,000 km of unneeded backup budget**, allowing financial teams to release locked capital while remaining 95% operationally secure.
+
+![Hybrid Pipeline](prophet_monte_carlo_hybrid.png)
+
+---
+
+## 🚀 Key Takeaways for Executive Decision Making
+* **Point Forecasts vs. Curves:** Instead of declaring *"We will run 2.3M km next month"*, this architecture proves that we can stay **95% safe** from capacity shortages by managing resource limits up to **2.38M km**.
+* **Risk Uncertainty Reduction:** Moving from Pure Monte Carlo to a Hybrid Architecture compressed total unmodeled variance by roughly **26%**, narrowing down the confidence interval and leading to better asset deployment.
+
+## 💻 Requirements & Quickstart
+Clone the repository and install the dependencies:
+```bash
+pip install numpy pandas matplotlib prophet openpyxl
+python forecasting_pipeline.py
