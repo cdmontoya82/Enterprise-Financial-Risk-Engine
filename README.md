@@ -67,6 +67,59 @@ To secure fleet capacity and hedge financial risks, supply chain teams need to k
 
 This repository approach includes three complementary implementation layers:
 
+┌────────────────────────────────────────────────────────────────────────┐
+│                          HISTORICAL BASELINE                           │
+│              (Filtered to Last 2 Years to Mitigate Legacy Bias)        │
+└──────────────────────────────────┬─────────────────────────────────────┘
+│
+┌─────────────────────────┼─────────────────────────┐
+▼                         ▼                         ▼
+┌───────────────────┐    ┌───────────────────┐    ┌───────────────────┐
+│  Pure Bootstrap   │    │   Meta Prophet    │    │ Dynamic Worksheet │
+│ (Monte Carlo Only)│    │   + MC Residuals  │    │  (Excel / OO)     │
+└────────┬──────────┘    └─────────┬─────────┘    └─────────┬─────────┘
+│                         │                        │
+▼                         ▼                        ▼
+[Raw Data Resampling]    [Fourier Time-Series]    [=INDEX() + RANDBETWEEN()]
+
+1. **Approach 1: Pure Monte Carlo Simulation (Python):** Resamples raw aggregated historical daily mileage $10,000$ times to determine an unconstrained baseline distribution.
+2. **Approach 2: Hybrid Pipeline (Prophet + MC Residuals):** **Meta Prophet** isolates structural calendar patterns (weekly/yearly seasonality). Then, **Monte Carlo** targets the model's historical residuals ($\text{Actual} - \text{Predicted}$). Resampling the *unmodeled chaos* over the structural trend compresses variance.
+3. **Approach 3: Excel / ONLYOFFICE Production Engine:** A fully dynamic, macro-free version of the stochastic model built with native international formulas for immediate corporate deployment.
+
+---
+
+## 📊 Performance Comparison & Core Interpretations
+
+By restricting the historical baseline strictly to the **last 2 years of consolidated national operations**, legacy structural shifts were successfully filtered out, leading to highly optimized and stable boundaries:
+
+### Python Outputs
+
+* **Approach 1: Pure Monte Carlo Simulation**
+  * **Risk Ceiling (95th Percentile):** ~2.63M km. (A wide unconstrained historical risk model).
+  * *Asset:* Located in `monte_carlo_pure.png`.
+
+* **Approach 2: Hybrid Prophet + Monte Carlo Model**
+  * **Risk Ceiling (95th Percentile):** ~2.38M km. 
+  * **The Optimization:** The Hybrid model narrows down unmodeled variance by **~26%**, cutting out **~240,000 km of unnecessary backup budget** while remaining 95% operationally secure.
+  * *Asset:* Located in `prophet_monte_carlo_hybrid.png`.
+
+### Excel / ONLYOFFICE Engine Output (`excel_models/`)
+Built strictly with non-VBA functions to match the core data science logic into executive tooling:
+
+* **Expected Mean:** ~2.36M km (Perfectly aligned with Prophet's structural trend).
+* **Risk Ceiling (95th Percentile):** ~2.47M km.
+* *Asset:* Chart available embedded inside the sheet.
+
+---
+
+## 💻 Technical Implementation Details
+
+### Excel / ONLYOFFICE Core Engine Formula
+To achieve non-parametric bootstrapping with replacement natively without performance degradation, the worksheet utilizes a stochastic indexing loop over the 2-year accumulated daily baseline pool:
+
+```excel
+=INDEX(Historical_Data!$F$2:$F$731; RANDBETWEEN(1; ROWS(Historical_Data!$F$2:$F$731)))
+
 ## 💻 Requirements & Quickstart
 Clone the repository and install the dependencies:
 ```bash
