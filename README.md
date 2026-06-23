@@ -50,9 +50,26 @@ By isolating the structural calendar patterns first, this model narrows down the
 ## 🚀 Key Takeaways for Executive Decision Making
 * **Point Forecasts vs. Curves:** Instead of declaring *"We will run 2.3M km next month"*, this architecture proves that we can stay **95% safe** from capacity shortages by managing resource limits up to **2.38M km**.
 * **Risk Uncertainty Reduction:** Moving from Pure Monte Carlo to a Hybrid Architecture compressed total unmodeled variance by roughly **26%**, narrowing down the confidence interval and leading to better asset deployment.
+# Stochastic Logistics Forecasting: Pure Monte Carlo vs. Hybrid Prophet Pipeline
+
+An advanced, production-grade data product designed to solve predictive risk management and fleet capacity optimization in freight logistics. This repository contains a dual-framework simulation architecture executed in both **Python** and **Excel / ONLYOFFICE** to model monthly operational risk distributions.
+
+---
+
+## 🏢 Business Problem & Objective
+In heavy freight logistics, relying on single-point average forecasts leads to operational failures due to real-world chaos (driver shortages, traffic disruptions, or sudden demand spikes). 
+
+To secure fleet capacity and hedge financial risks, supply chain teams need to know **not just the average outcome, but the risk ceiling (95th percentile confidence)** to avoid capacity stockouts while preventing the freezing of unnecessary capital.
+
+---
+
+## 🛠️ Framework Architecture
+
+This repository approach includes three complementary implementation layers:
 
 ## 💻 Requirements & Quickstart
 Clone the repository and install the dependencies:
 ```bash
 pip install numpy pandas matplotlib prophet openpyxl
 python forecasting_pipeline.py
+
