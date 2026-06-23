@@ -96,7 +96,13 @@ By restricting the historical baseline strictly to the **last 2 years of consoli
 
 * **Approach 1: Pure Monte Carlo Simulation**
   * **Risk Ceiling (95th Percentile):** ~2.63M km. (A wide unconstrained historical risk model).
-  * *Asset:* Located in `monte_carlo_pure.png`.
+  ### Excel / ONLYOFFICE Engine Output (`excel_models/`)
+Built strictly with non-VBA functions to match the core data science logic into executive tooling:
+
+* **Expected Mean:** ~2.36M km (Perfectly aligned with Prophet's structural trend).
+* **Risk Ceiling (95th Percentile):** ~2.47M km.
+
+![Excel Simulation Chart](excel_monte_carlo_distribution.png)
 
 * **Approach 2: Hybrid Prophet + Monte Carlo Model**
   * **Risk Ceiling (95th Percentile):** ~2.38M km. 
