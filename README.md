@@ -2,22 +2,17 @@
 
 An advanced data product designed to solve predictive risk management in freight logistics. This repository contains a comparative framework between a **Pure Stochastic Monte Carlo Simulation** and a **Hybrid Time-Series Model (Meta Prophet + Monte Carlo Residuals)** to simulate and quantify risk ceilings for monthly operations.
 
-## 📈 Business Problem
-In freight logistics, traditional "point forecasts" (averages) fail drastically because they ignore high-impact operational chaos: driver availability shortages, weather disruptions, route deviations, and unpredictable demand spikes. 
+## 🏢 Business Problem & Objective
+In heavy freight distribution networks, conventional single-point forecasts (averages) systematically trigger operational stockouts or capital over-allocation. Point forecasts fail because they ignore real-world stochastic volatility: driver shortages, fleet breakdowns, severe weather events, and non-linear demand shocks.
 
-To hedge financial risk and secure fleet capacity, supply chain executives need to know **not just the average outcome, but the risk ceiling (95th percentile confidence)** to avoid capacity stockouts or budget overruns.
-
----
+To hedge financial exposure while guaranteeing fleet availability, supply chain decision-makers require **not just expected values, but probabilistic risk ceilings (95th percentile confidence / Value-at-Risk limits)** to eliminate stockouts without freezing unnecessary working capital.
 
 ## 🛠️ Framework Architecture
 
-This framework processes real-world delivery logs and runs two distinct paradigms:
+The framework filters historical transactional delivery logs to the **last 2 years of consolidated national operations** 
+(eliminating legacy structural shifts) and evaluates three complementary paradigms:
 
-1. **Pure Monte Carlo Simulation (Bootstrapping):** Resamples raw historical daily mileage logs $10,000$ times to determine a distribution based strictly on historical variance.
-2. **Hybrid Pipeline (Prophet + MC Error Modelling):** * **Prophet** captures time-series patterns (weekly patterns, seasonal trends, and upcoming calendar structures).
-   * **Monte Carlo** targets the model's historical residuals ($\text{Actual} - \text{Predicted}$). By simulating the *unmodeled chaos* over the structural forecast, it provides a much tighter and highly realistic risk distribution.
-  
- ```text
+```text
 ┌────────────────────────────────────────────────────────────────────────┐
 │                        HISTORICAL DATA LAKE                            │
 │           (Filtered to Last 2 Years to Mitigate Legacy Bias)           │
