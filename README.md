@@ -123,11 +123,11 @@ Built strictly with non-VBA functions to match the core data science logic into 
 
 ## 💻 Technical Implementation Details
 
-### Excel / ONLYOFFICE Core Engine Formula
-To achieve non-parametric bootstrapping with replacement natively without performance degradation, the worksheet utilizes a stochastic indexing loop over the 2-year accumulated daily baseline pool:
+### Dynamic Worksheet Core Engine (Excel / ONLYOFFICE)
+To achieve non-parametric bootstrapping with replacement natively without relying on VBA or external macros, the model utilizes vectorized relative lookups:
 
 ```excel
-=INDEX(Historical_Data!$F$2:$F$731; RANDBETWEEN(1; ROWS(Historical_Data!$F$2:$F$731)))
+=INDEX(Historical_Data!$F$2:$F$731, RANDBETWEEN(1, ROWS(Historical_Data!$F$2:$F$731)))
 
 ## 💻 Requirements & Quickstart
 Clone the repository and install the dependencies:
