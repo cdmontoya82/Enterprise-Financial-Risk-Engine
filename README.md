@@ -17,16 +17,24 @@ This framework processes real-world delivery logs and runs two distinct paradigm
 2. **Hybrid Pipeline (Prophet + MC Error Modelling):** * **Prophet** captures time-series patterns (weekly patterns, seasonal trends, and upcoming calendar structures).
    * **Monte Carlo** targets the model's historical residuals ($\text{Actual} - \text{Predicted}$). By simulating the *unmodeled chaos* over the structural forecast, it provides a much tighter and highly realistic risk distribution.
   
-   * ┌───────────────────┐      ┌────────────────────┐
-   │ Historical Data   │─────>│   Meta Prophet     │───> [Structural Trend]
-   └───────────────────┘      └────────────────────┘          │
-             │                           │                    │
-             ▼                           ▼                    ▼
-   ┌───────────────────┐      ┌────────────────────┐      ┌────────────────────┐
-   │  Pure Bootstrap   │      │ Compute Residuals  │      │ Combine & Simulate │
-   │ (Monte Carlo Only)│      │  (Chaos Extraction)│      │ (Hybrid Output)    │
-   └───────────────────┘      └────────────────────┘      └────────────────────┘
----
+ ```text
+┌────────────────────────────────────────────────────────────────────────┐
+│                        HISTORICAL DATA LAKE                            │
+│           (Filtered to Last 2 Years to Mitigate Legacy Bias)           │
+└──────────────────────────────────┬─────────────────────────────────────┘
+                                   │
+         ┌─────────────────────────┼─────────────────────────┐
+         ▼                         ▼                         ▼
+┌───────────────────┐     ┌───────────────────┐     ┌───────────────────┐
+│  Pure Bootstrap   │     │    Meta Prophet   │     │ Dynamic Worksheet │
+│ (Monte Carlo Only)│     │  + MC Residuals   │     │   (Excel / OO)    │
+└────────┬──────────┘     └─────────┬─────────┘     └─────────┬─────────┘
+         │                          │                         │
+         ▼                          ▼                         ▼
+ [Raw Data Resample]      [Residuals Extraction]    [INDEX + RANDBETWEEN]
+         │                          │                         │
+         ▼                          ▼                         ▼
+ [Historical Bounds]      [Variance Compression]    [Non-VBA Corporate]
 
 ## 📊 Performance Comparison & Interpretations
 
